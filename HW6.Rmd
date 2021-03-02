@@ -1,0 +1,169 @@
+---
+title: "Math 295: Homework 6"
+subtitle: "Mapping, Scraping, and Factors, Oh My!"
+author: "Be Sure to Put Your Name Here"  
+date: "Due Tuesday, March 9, 2021 by 11:59 pm"
+output: 
+  github_document: 
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include = FALSE}
+# Don't change this setup chunk. 
+# It sets global defaults and includes the tidyverse packages
+# The option include = FALSE prevents warnings and messages from printing to your report.
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+# 1. Mapping County Census Data  
+
+```{r, include = FALSE}
+library(maps)
+```
+
+Knowing how to access and work with census data is an important skill for any data scientist. For this question, you will need to import census data and access the information you need to construct Choropleth county-level maps reflecting the proportion of the population who are older adults. 
+
+The `data` directory contains files you will need to carry out this analysis:  
+
+* `AGE03.csv`: census file containing the data you will need (and much more that you do not need!)  
+
+* `Mastdata.xls`: spreadsheet containing a list of more than 6000 census items (with descriptions) that are available at the county level.  
+
+**a)** Open `Mastdata.xls` outside of RStudio (in Excel or Google Sheets) and find the name of the one item which contains this very specific information:  "Resident population 65 years and over, percent (July 1 - estimate) 2009". Write down the variable name (known in Census jargon as `Item_Id`).  
+
+**Answer:**  
+
+```{r}
+
+```
+
+**b)** Now use an appropriate `readr()` statement to read the entire `AGE03.csv` data file into a tibble called `census_data`.  
+
+**Answer:**  
+
+```{r}
+
+```
+
+**c)** Select from `census_data` only the columns and rows you will need to graph the percent of residents 65 and over for each county in the mainland US, excluding DC, Hawaii, and Alaska. Use appropriate commands to select the columns and rows you need and/or exclude those you do not need. (The column `STCOU` gives state and county codes and may be useful in selecting/filtering rows.) Save the data set under the name `county_age_data`.    
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**d)** To combine the census data with the mapping data will require a couple of steps. First split the `Areaname` variable into a variable called `subregion` which contains the county name and `region` which contains the state abbreviation.  Call this new file `county_age_data2`. 
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**e)** In order to use the county level mapping data, we need the state name rather than just the abbreviation. Create a "crosswalk" or look-up table (actually a tibble) using the R built-in variables **state.abb** and **state.name** (they're part of Base R and always available). Your new tibble should contain fifty rows, one for each state and two columns, one for the state 2-letter abbreviation and one for the state name.  Use this `crosswalk` table to add the column of state names to your county data. Call the new data set `county_age_data3`. (Note: If we did this all in one long pipe, we would not need intermediate names but it might also get more confusing the first time through.)
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**f)** Now join the county level data to the mapping data from the package **maps** we used in class. Call the new data set `merged_county()`.  Create a county-level map of the U.S that maps the proportion of the population 65 and over to the "fill" aesthetic. You can use whatever color scheme you like.  (Hint: If you get everything to work but see some holes in your map, don't worry. Continue to the next part.)
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**g)** Unless you have been very thorough, your map likely has some holes in it because not all county names matched correctly. Use `anti_join()` to identify the counties with no matches. By looking at the original data, identify at least 2 reasons why matches failed.
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+
+**h)** Create a subset of the census data for only counties in Florida. Use string functions to fix the unmatched county names in Florida so that each Florida county has complete data. Use this data set to create a Florida county map with counties shaded by percent of the population 65 and over.  
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**i)** Within Florida, where are high concentrations of seniors? Look at your map and comment on any patterns you see.  
+
+**Answer:**  
+
+
+
+# 2. Scraping the Top Grossing Movies  
+
+For this problem, use the `rvest` package to scrape data from IDMB's list of top grossing films released in 2018.
+
+```{r}
+library(rvest)
+```
+
+**a)** Use `read_html()` to read the data from the link "https://www.imdb.com/search/title?year=2018&title_type=feature&sort=boxoffice_gross_us,desc". Call the object you created `movie_parse`.
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**b)** Now use selector gadget as we did in class to identify the CSS selectors for ranking (out of 50), title, gross, IMDBscore, metascore, genre(s), and number of votes. Where appropriate, parse the data to numeric variables.  Save the data in a tibble called `movie_data`.  (Hint: If you run into unexpected results, troubleshoot and take appropriate action so that you end up with a data set of 50 rows. It is possible that there will be at least one NA value somewhere along the way. Watch out for it.)
+
+**Answer:**  
+
+```{r}
+
+```
+
+**c)** Use `mutate()` to add two new **logical** variables to your data set: one called `action` if the movie was classified with the "action" genre tag and "comedy" if tagged as a "comedy".  Store this data as `movie_data2`.   
+
+
+```{r}
+
+```
+
+
+**d)** Then generate a scatterplot of one of the gross (y) against one of the ratings (x), coloring points using the number of votes and labeling outliers with the title of the movie. Here is an example of what the ggplot2 layer for labeling outliers might look like (but the rest you should know already). You should study the code and look at help on `geom_text()` to figure out what each piece is doing. Comment on the strength of the relationship and identify any outliers. [Note: you cannot run this chunk as is. It simply shows the structure of the command.] 
+
+```{r, eval = FALSE}
+ggplot(df) + 
+  geom_point(aes(x,y)) + 
+  geom_text(data=subset(df, xval < 100 | yval > 500), 
+            check_overlap = TRUE, angle = 45, size = 1.5, nudge_y = 10)
+```
+
+**Answer:**  
+
+```{r}
+
+```
+
+
+**e)** Finally, create a plot of gross versus a combination of the two genre variables. Along the y-axis, you should have a separate row for each combination of the two genres (action and comedy, action but not comedy, comedy but not action, neither action nor comedy). Gross would then be plotted along the x-axis. We have seen examples of such a plot before. 
+
+**Answer:**  
+
+```{r}
+
+```
+
