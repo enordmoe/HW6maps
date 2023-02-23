@@ -2,7 +2,7 @@
 title: "Math 295: Homework 6"
 subtitle: "Mapping and Scraping!"
 author: "Be Sure to Put Your Name Here"  
-date: "Due Tuesday, March 9, 2021 by 11:59 pm"
+date: "Due Monday, March 6, 2023 by 11:59 pm"
 output: 
   github_document: 
     toc: true
