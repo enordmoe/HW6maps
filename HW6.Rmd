@@ -1,5 +1,5 @@
 ---
-title: "Math 295: Homework 6"
+title: "Math 265: Homework 6"
 subtitle: "Mapping and Scraping!"
 author: "Be Sure to Put Your Name Here"  
 date: "Due Monday, March 6, 2023 by 11:59 pm"
